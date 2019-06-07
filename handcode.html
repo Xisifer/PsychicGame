@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    
+<h1>Key Pressed: <span id="keyPress"></span></h1>
+<br>
+<h3>
+    <!-- Here I'm showing the visible text to the user that displays the relevant variables. -->
+    <p>Wins: <span id="displayWins"></span></p>
+
+    <p>Losses: <span id="displayLosses"></span></p>
+
+    <p>Guesses Left: <span id="displayGuesses"></span></p>
+
+</h3>
+
+
+<script>
+    /* Pseudocode time!
+    We need this program to do the following:
+
+
+    1. Create an array of all letters in the alphabet, A - Z
+    2. Create variables for:
+        User Guess
+        Computer Guess
+        Games Won
+        Games Lost
+        Game Count
+        Amount of Guesses Left
+    3. Create a script that will detect the User's input
+    4. Check if the User's input is a legal input (can only input A - Z, no numbers, no symbols)
+    5. Have the Computer randomly select a letter from the Alphabet array
+    6. Check whether the User's guess is the same as the Computer's guess
+    6a. If the guesses are the same, User wins! Wins goes up by 1
+    6b. If the guesses are different, Computer wins! Losses goes up by 1, and the Guesses Left goes down by 1.
+    7. Have some text display on the HTML on the screen:
+        "You guessed: <UserGuess>"
+        "Computer chose: <CoputerGuess>"
+        "You Won/You Lost!"
+    8. Reset the game once they reach 3 wins? 
+    */
+
+
+
+
+
+// This is the array of all alphabet letters A - Z
+    var computerChoices = ["a", "b", "c", "d", "e", "f", "g", 
+    "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", 
+    "s", "t", "u", "v", "w", "x", "y", "z"];
+
+/* These are the variables for Games Won, Games Lost, Game Count 
+and Guesses Left */
+    var wins = 0;
+    var losses = 0;
+    var game = 0;
+    var guessesLeft = 5;
+// This sets the HTML elements to be equal to the related variables. So in 
+// this instance, the HTML span element "displayWins" is being set equal
+// to the declared variable "wins". 
+    displayWins.textContent = wins;
+    displayLosses.textContent = losses;
+    displayGuesses.textContent = guessesLeft;
+
+      // Randomly chooses a choice from the options array. This is the Computer's guess.
+      var computerGuess = computerChoices[Math.floor(Math.random() * computerChoices.length)];  
+
+// This script detects the user's input
+document.onkeydown = function(event) {
+    var userGuess = event.key;
+// This does something??? BLACK MAGIC HAPPENS.
+    var keypress = document.getElementById("keyPress") 
+    keyPress.textContent = userGuess;
+// Somehow, the keyPress variable is stored into the 
+// keyPress ID, and somehow those are two different things?
+
+// Whatever. All I need to understand is that the user's input 
+// has been captured and spat back onto the screen. Now I can 
+// do things with that!
+
+// Next, we need to check whether the user's input is legitimate. 
+// We do this with an IF statement. I.E., "if the user's input does 
+// not equal -1 in this array (translation: If the input is NOT un-findable)
+// then logically it must BE part of this array."
+if (computerChoices.indexOf(userGuess) != -1 ) {
+    // If the User guesses the same as the Computer, the User wins!
+    if (computerGuess === userGuess) {
+        wins++
+        game++
+    } 
+    // But if the User does NOT guess the same as the Computer, 
+    // the User loses one Guess.
+    else {
+        guessesLeft--
+        // if the amount of Guesses Left reaches 0, 
+        // the User loses and the amount of Losses goes up
+        if (guessesLeft === 0) {
+            losses++
+        }
+
+    }
+}
+else message.textContent = "Only letters A - Z are valid inputs.";
+
+
+}
+
+
+
+</script>
+
+</body>
+</html>
