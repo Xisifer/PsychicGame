@@ -19,7 +19,11 @@
 
     <p>Guesses Left: <span id="displayGuesses"></span></p>
 
+    <p>You guessed: <span id="guesslist"></span></p>
+
     <p><span id="message"></span></p>
+
+
 
 </h3>
 
@@ -52,7 +56,7 @@
     */
 
 
-
+var guessList = [];
 
 
 // This is the array of all alphabet letters A - Z
@@ -75,6 +79,8 @@ and Guesses Left */
 
       // Randomly chooses a choice from the options array. This is the Computer's guess.
       var computerGuess = computerChoices[Math.floor(Math.random() * computerChoices.length)];  
+            console.log(computerGuess);
+            document.getElementById("computerGuess").innerHTML = computerGuess;
 
 // This script detects the user's input
 document.onkeydown = function(event) {
@@ -83,6 +89,9 @@ document.onkeydown = function(event) {
 // This takes keyPress, and writes it to the document (through the HTML span, with the ID = keyPress), and makes that equal to the userGuess variable.
 // Which is also equal to the keyboard input event.
     document.getElementById("keyPress").innerHTML = userGuess;
+
+    guessList.push(userGuess);
+    console.log(guessList);
 
 
 // This does the same thing for computerGuess
@@ -127,42 +136,67 @@ Every time a variable changes, PRINT IT OUT to the console log. Just to see what
 // =============================
 //End of spitball notes
 // =============================
+var newDrinkP = document.createElement("p");
+
+if (computerChoices.indexOf(userGuess) !== -1 ) {
 
 
-if (computerChoices.indexOf(userGuess) != -1 ) {
+
+
+
     // If the User guesses the same as the Computer, the User wins!
     if (computerGuess === userGuess) {
         wins++;
         // This writes and updates the modified Wins variable onto the screen
         document.getElementById("displayWins").innerHTML = wins;
-        // This makes the computer pick a new letter
-        computerGuess = computerChoices[Math.floor(Math.random() * computerChoices.length)];  
+        // This makes the computer pick a new letter 
+        computerGuess = computerChoices[Math.floor(Math.random() * computerChoices.length)]; 
     } 
     // But if the User does NOT guess the same as the Computer, 
-    // the User loses one Guess.
+
     else {
+
+        // the User loses one Guess
         guessesLeft--;
         // This updates the Guesses Left counter
         document.getElementById("displayGuesses").innerHTML = guessesLeft;
+        // and the user's incorrect guess is printed out onto the screen
+        document.getElementById("guesslist").innerHTML = guessList;
+        // and this is appended onto itself??? AUTOMATICALLY because it's an Array.
+
+        // document.append("userGuess");
+        
+        
+        
+        
+        
         // if the amount of Guesses Left reaches 0, 
         // the User loses and the amount of Losses goes up
         if (guessesLeft === 0) {
             // Losses goes up
             losses++;
+            // This makes the computer pick a new letter 
+            computerGuess = computerChoices[Math.floor(Math.random() * computerChoices.length)]; 
             // The on-screen element for Losses is updated
             document.getElementById("displayLosses").innerHTML = losses;
-            // This makes the computer pick a new letter 
-            computerGuess = computerChoices[Math.floor(Math.random() * computerChoices.length)];  
+
+            // And the Array for the user Guess List is reset.
+            guessList = [];
+
+            // computerGuess = computerChoices[Math.floor(Math.random() * computerChoices.length)];  
             console.log(computerGuess);
             // The guesses left counter is reset to 10 again.
-            console.log(guessesLeft);
-            console.log("=============");
-            guessesLeft === 10;
-            console.log("=============");
-            console.log(guessesLeft);
+            // console.log(guessesLeft);
+            // console.log("=============");
+            guessesLeft = 5;
+            document.getElementById("displayGuesses").innerHTML = guessesLeft;
+            // console.log("=============");
+            // console.log(guessesLeft);
         }
 
     }
+
+
 }
 
 // We need to check whether the user's input is legitimate. 
@@ -170,7 +204,9 @@ if (computerChoices.indexOf(userGuess) != -1 ) {
 // not equal -1 in this array (translation: If the input is NOT un-findable)
 // then logically it must BE part of this array."
 
-if (computerChoices.indexOf(userGuess) === -1 ) {
+
+// (computerChoices.indexOf(userGuess) === -1 )
+else  {
 
     document.getElementById("message").innerHTML = "ERROR: Only letters A - Z are valid inputs.";
 
