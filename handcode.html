@@ -8,7 +8,8 @@
 </head>
 <body>
     
-<h1>Key Pressed: <span id="keyPress"></span></h1>
+<h1>Key Pressed: <span id="keyPress">  </span></h1>
+<h2><p>Computer Guessed: <span id="computerGuess">   </span></p></h2>
 <br>
 <h3>
     <!-- Here I'm showing the visible text to the user that displays the relevant variables. -->
@@ -18,10 +19,14 @@
 
     <p>Guesses Left: <span id="displayGuesses"></span></p>
 
+    <p><span id="message"></span></p>
+
 </h3>
 
 
-<script>
+<script type="text/javascript">
+
+
     /* Pseudocode time!
     We need this program to do the following:
 
@@ -32,7 +37,6 @@
         Computer Guess
         Games Won
         Games Lost
-        Game Count
         Amount of Guesses Left
     3. Create a script that will detect the User's input
     4. Check if the User's input is a legal input (can only input A - Z, no numbers, no symbols)
@@ -60,7 +64,7 @@
 and Guesses Left */
     var wins = 0;
     var losses = 0;
-    var game = 0;
+    // var game = 0;
     var guessesLeft = 5;
 // This sets the HTML elements to be equal to the related variables. So in 
 // this instance, the HTML span element "displayWins" is being set equal
@@ -75,44 +79,96 @@ and Guesses Left */
 // This script detects the user's input
 document.onkeydown = function(event) {
     var userGuess = event.key;
-// This does something??? BLACK MAGIC HAPPENS.
-    var keypress = document.getElementById("keyPress") 
-    keyPress.textContent = userGuess;
-// Somehow, the keyPress variable is stored into the 
-// keyPress ID, and somehow those are two different things?
 
-// Whatever. All I need to understand is that the user's input 
-// has been captured and spat back onto the screen. Now I can 
-// do things with that!
+// This takes keyPress, and writes it to the document (through the HTML span, with the ID = keyPress), and makes that equal to the userGuess variable.
+// Which is also equal to the keyboard input event.
+    document.getElementById("keyPress").innerHTML = userGuess;
 
-// Next, we need to check whether the user's input is legitimate. 
-// We do this with an IF statement. I.E., "if the user's input does 
-// not equal -1 in this array (translation: If the input is NOT un-findable)
-// then logically it must BE part of this array."
+
+// This does the same thing for computerGuess
+    document.getElementById("computerGuess").innerHTML = computerGuess;
+
+
+
+
+/* LOOP! For up to 5 tries, go through this logic.
+ Set up a random number generator? Generate a number from 1 - 26. 
+ Turn that into a letter from A - Z.
+
+For up to 5 tries, computer asks the user for a letter.
+Get a response.
+Is the letter equal as the computer's letter?
+    If yes, exit the loop, Wins +
+    If no, then go back to top.
+Assume Loss.
+
+ANOTHER METHOD
+Start with a variable of computerGuess
+Define the game as a Loss at the beginning
+Enter the loop for up to 5 times.
+    Set loop counter 
+    When you win, set Loop Counter equal to 
+    something above 5 (like 12), which will 
+    push you out of the Loop
+When you get out, check whether the counter is that 12, or something like 6
+    If 6, the user lost and used up their guesses
+    If 12, user won, increment Wins+
+
+ANOTHER METHOD
+Use a function?
+    Calls the function 5 times
+    Determine whether game is Win or Loss
+
+Every time a variable changes, PRINT IT OUT to the console log. Just to see what happens.
+
+*/
+
+
 if (computerChoices.indexOf(userGuess) != -1 ) {
     // If the User guesses the same as the Computer, the User wins!
     if (computerGuess === userGuess) {
-        wins++
-        game++
+        wins++;
+        // This writes and updates the modified Wins variable onto the screen
+        document.getElementById("displayWins").innerHTML = wins;
+        // This makes the computer pick a new letter
+        computerGuess = computerChoices[Math.floor(Math.random() * computerChoices.length)];  
     } 
     // But if the User does NOT guess the same as the Computer, 
     // the User loses one Guess.
     else {
-        guessesLeft--
+        guessesLeft--;
+        // This updates the Guesses Left counter
+        document.getElementById("displayGuesses").innerHTML = guessesLeft;
         // if the amount of Guesses Left reaches 0, 
         // the User loses and the amount of Losses goes up
         if (guessesLeft === 0) {
-            losses++
+            // Losses goes up
+            losses++;
+            // The on-screen element for Losses is updated
+            document.getElementById("displayLosses").innerHTML = losses;
+            // This makes the computer pick a new letter 
+            computerGuess = computerChoices[Math.floor(Math.random() * computerChoices.length)];  
+            // The guesses left counter is reset to 10 again.
+            guessesLeft === 10;
         }
 
     }
 }
-else message.textContent = "Only letters A - Z are valid inputs.";
+
+// We need to check whether the user's input is legitimate. 
+// We do this with an IF statement. I.E., "if the user's input does 
+// not equal -1 in this array (translation: If the input is NOT un-findable)
+// then logically it must BE part of this array."
+
+if (computerChoices.indexOf(userGuess) === -1 ) {
+
+    document.getElementById("message").innerHTML = "ERROR: Only letters A - Z are valid inputs.";
+
+    // message.textContent = ;
+    }
 
 
 }
-
-
 
 </script>
 
