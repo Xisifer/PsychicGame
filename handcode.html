@@ -7,9 +7,11 @@
     <title>Document</title>
 </head>
 <body>
+
     
 <h1>Key Pressed: <span id="keyPress">  </span></h1>
-<h2><p>Computer Guessed: <span id="computerGuess">   </span></p></h2>
+
+<h2 id="computerText"><p>Computer Guessed: <span id="computerGuess">   </span></p></h2>
 <br>
 <h3>
     <!-- Here I'm showing the visible text to the user that displays the relevant variables. -->
@@ -27,6 +29,12 @@
 
 </h3>
 
+<!-- This hides the Computer's Guess from the user, so no cheating! -->
+<style>
+        #computerText {
+            display:none;
+        }
+</style>
 
 <script type="text/javascript">
 
@@ -55,11 +63,9 @@
     8. Reset the game once they reach 3 wins? 
     */
 
+// This clears the guessList at the start.
+    var guessList = [];
 
-var guessList = [];
-
-
-// This is the array of all alphabet letters A - Z
     var computerChoices = ["a", "b", "c", "d", "e", "f", "g", 
     "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", 
     "s", "t", "u", "v", "w", "x", "y", "z"];
@@ -68,8 +74,7 @@ var guessList = [];
 and Guesses Left */
     var wins = 0;
     var losses = 0;
-    // var game = 0;
-    var guessesLeft = 5;
+    var guessesLeft = 10;
 // This sets the HTML elements to be equal to the related variables. So in 
 // this instance, the HTML span element "displayWins" is being set equal
 // to the declared variable "wins". 
@@ -77,121 +82,67 @@ and Guesses Left */
     displayLosses.textContent = losses;
     displayGuesses.textContent = guessesLeft;
 
-      // Randomly chooses a choice from the options array. This is the Computer's guess.
-      var computerGuess = computerChoices[Math.floor(Math.random() * computerChoices.length)];  
-            console.log(computerGuess);
-            document.getElementById("computerGuess").innerHTML = computerGuess;
+// Randomly chooses a choice from the options array. This is the Computer's guess.
+// This is the function to make the computer Pick a new number, and write that new number to the HTML.
+function computerNewGuess() {
+    computerGuess = computerChoices[Math.floor(Math.random() * computerChoices.length)]; 
+    document.getElementById("computerGuess").innerHTML = computerGuess;
+};
+// This function writes the updated guessesLeft onto the HTML.
+function updateGuesses () {
+    document.getElementById("displayGuesses").innerHTML = guessesLeft;
+}
+
+// First-Time runthrough, the computer picks a guess before the user does anything. 
+// So if the user somehow guesses right on the very first try, they are rewarded.
+      computerNewGuess();
 
 // This script detects the user's input
 document.onkeydown = function(event) {
     var userGuess = event.key;
 
-// This takes keyPress, and writes it to the document (through the HTML span, with the ID = keyPress), and makes that equal to the userGuess variable.
+// This takes keyPress, and writes it to the document 
+// (through the HTML span, with the ID = keyPress), 
+// and makes that equal to the userGuess variable.
 // Which is also equal to the keyboard input event.
     document.getElementById("keyPress").innerHTML = userGuess;
 
+// This takes whatever the user typed, and pushes it into the guessList array.
     guessList.push(userGuess);
     console.log(guessList);
 
-
-// This does the same thing for computerGuess
-    document.getElementById("computerGuess").innerHTML = computerGuess;
-
-
-
-// =============================
-//Adding some brainstorming notes from spitballing and talking the problem out
-// =============================
-/* LOOP! For up to 5 tries, go through this logic.
- Set up a random number generator? Generate a number from 1 - 26. 
- Turn that into a letter from A - Z.
-
-For up to 5 tries, computer asks the user for a letter.
-Get a response.
-Is the letter equal as the computer's letter?
-    If yes, exit the loop, Wins +
-    If no, then go back to top.
-Assume Loss.
-
-ANOTHER METHOD
-Start with a variable of computerGuess
-Define the game as a Loss at the beginning
-Enter the loop for up to 5 times.
-    Set loop counter 
-    When you win, set Loop Counter equal to 
-    something above 5 (like 12), which will 
-    push you out of the Loop
-When you get out, check whether the counter is that 12, or something like 6
-    If 6, the user lost and used up their guesses
-    If 12, user won, increment Wins+
-
-ANOTHER METHOD
-Use a function?
-    Calls the function 5 times
-    Determine whether game is Win or Loss
-
-Every time a variable changes, PRINT IT OUT to the console log. Just to see what happens.
-
-*/
-// =============================
-//End of spitball notes
-// =============================
-var newDrinkP = document.createElement("p");
-
 if (computerChoices.indexOf(userGuess) !== -1 ) {
 
-
-
-
-
-    // If the User guesses the same as the Computer, the User wins!
+    // If User guesses the same as Computer, the User wins!
     if (computerGuess === userGuess) {
         wins++;
-        // This writes and updates the modified Wins variable onto the screen
+        // Win counter on screen is updated, and Computer guesses again.
         document.getElementById("displayWins").innerHTML = wins;
-        // This makes the computer pick a new letter 
-        computerGuess = computerChoices[Math.floor(Math.random() * computerChoices.length)]; 
+        computerNewGuess();
     } 
-    // But if the User does NOT guess the same as the Computer, 
 
     else {
-
         // the User loses one Guess
         guessesLeft--;
-        // This updates the Guesses Left counter
-        document.getElementById("displayGuesses").innerHTML = guessesLeft;
+        // This function updates the Guesses Left counter
+        updateGuesses();
         // and the user's incorrect guess is printed out onto the screen
         document.getElementById("guesslist").innerHTML = guessList;
-        // and this is appended onto itself??? AUTOMATICALLY because it's an Array.
 
-        // document.append("userGuess");
-        
-        
-        
-        
-        
-        // if the amount of Guesses Left reaches 0, 
-        // the User loses and the amount of Losses goes up
         if (guessesLeft === 0) {
             // Losses goes up
             losses++;
-            // This makes the computer pick a new letter 
-            computerGuess = computerChoices[Math.floor(Math.random() * computerChoices.length)]; 
+            // the Computer picks a new letter
+            computerNewGuess();
             // The on-screen element for Losses is updated
             document.getElementById("displayLosses").innerHTML = losses;
-
             // And the Array for the user Guess List is reset.
             guessList = [];
-
-            // computerGuess = computerChoices[Math.floor(Math.random() * computerChoices.length)];  
-            console.log(computerGuess);
+           console.log(computerGuess);
             // The guesses left counter is reset to 10 again.
-            // console.log(guessesLeft);
-            // console.log("=============");
-            guessesLeft = 5;
-            document.getElementById("displayGuesses").innerHTML = guessesLeft;
-            // console.log("=============");
-            // console.log(guessesLeft);
+            guessesLeft = 10;
+            updateGuesses();
+
         }
 
     }
@@ -203,19 +154,12 @@ if (computerChoices.indexOf(userGuess) !== -1 ) {
 // We do this with an IF statement. I.E., "if the user's input does 
 // not equal -1 in this array (translation: If the input is NOT un-findable)
 // then logically it must BE part of this array."
-
-
-// (computerChoices.indexOf(userGuess) === -1 )
 else  {
-
     document.getElementById("message").innerHTML = "ERROR: Only letters A - Z are valid inputs.";
-
-    // message.textContent = ;
     }
 
 
 }
-
 </script>
 
 </body>
