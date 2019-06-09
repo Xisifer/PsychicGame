@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+
+    
+<h1>Key Pressed: <span id="keyPress">  </span></h1>
+
+<h2 id="computerText"><p>Computer Guessed: <span id="computerGuess">   </span></p></h2>
+<br>
+<h3>
+    <!-- Here I'm showing the visible text to the user that displays the relevant variables. -->
+    <p>Wins: <span id="displayWins"></span></p>
+
+    <p>Losses: <span id="displayLosses"></span></p>
+
+    <p>Guesses Left: <span id="displayGuesses"></span></p>
+
+    <p>You guessed: <span id="guesslist"></span></p>
+
+    <p><span id="message"></span></p>
+
+
+
+</h3>
+
+<!-- This hides the Computer's Guess from the user, so no cheating! -->
+<style>
+        #computerText {
+            display:none;
+        }
+</style>
+
+<script type="text/javascript">
+
+
+    /* Pseudocode time!
+    We need this program to do the following:
+
+
+    1. Create an array of all letters in the alphabet, A - Z
+    2. Create variables for:
+        User Guess
+        Computer Guess
+        Games Won
+        Games Lost
+        Amount of Guesses Left
+    3. Create a script that will detect the User's input
+    4. Check if the User's input is a legal input (can only input A - Z, no numbers, no symbols)
+    5. Have the Computer randomly select a letter from the Alphabet array
+    6. Check whether the User's guess is the same as the Computer's guess
+    6a. If the guesses are the same, User wins! Wins goes up by 1
+    6b. If the guesses are different, Computer wins! Losses goes up by 1, and the Guesses Left goes down by 1.
+    7. Have some text display on the HTML on the screen:
+        "You guessed: <UserGuess>"
+        "Computer chose: <CoputerGuess>"
+        "You Won/You Lost!"
+    8. Reset the game once they reach 3 wins? 
+    */
+
+// This clears the guessList at the start.
+    var guessList = [];
+
+    var computerChoices = ["a", "b", "c", "d", "e", "f", "g", 
+    "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", 
+    "s", "t", "u", "v", "w", "x", "y", "z"];
+
+/* These are the variables for Games Won, Games Lost, Game Count 
+and Guesses Left */
+    var wins = 0;
+    var losses = 0;
+    var guessesLeft = 10;
+// This sets the HTML elements to be equal to the related variables. So in 
+// this instance, the HTML span element "displayWins" is being set equal
+// to the declared variable "wins". 
+    displayWins.textContent = wins;
+    displayLosses.textContent = losses;
+    displayGuesses.textContent = guessesLeft;
+
+// Randomly chooses a choice from the options array. This is the Computer's guess.
+// This is the function to make the computer Pick a new number, and write that new number to the HTML.
+function computerNewGuess() {
+    computerGuess = computerChoices[Math.floor(Math.random() * computerChoices.length)]; 
+    document.getElementById("computerGuess").innerHTML = computerGuess;
+};
+// This function writes the updated guessesLeft onto the HTML.
+function updateGuesses () {
+    document.getElementById("displayGuesses").innerHTML = guessesLeft;
+}
+
+// First-Time runthrough, the computer picks a guess before the user does anything. 
+// So if the user somehow guesses right on the very first try, they are rewarded.
+      computerNewGuess();
+
+// This script detects the user's input
+document.onkeydown = function(event) {
+    var userGuess = event.key;
+
+// This takes keyPress, and writes it to the document 
+// (through the HTML span, with the ID = keyPress), 
+// and makes that equal to the userGuess variable.
+// Which is also equal to the keyboard input event.
+    document.getElementById("keyPress").innerHTML = userGuess;
+
+// This takes whatever the user typed, and pushes it into the guessList array.
+    guessList.push(userGuess);
+    console.log(guessList);
+
+if (computerChoices.indexOf(userGuess) !== -1 ) {
+
+    // If User guesses the same as Computer, the User wins!
+    if (computerGuess === userGuess) {
+        wins++;
+        // Win counter on screen is updated, and Computer guesses again.
+        document.getElementById("displayWins").innerHTML = wins;
+        computerNewGuess();
+        console.log(computerGuess);
+        // The guesses left counter is reset to 10 again.
+        guessesLeft = 10;
+        updateGuesses();
+        // And the Array for the user Guess List is reset.
+        guessList = [];
+        document.getElementById("guesslist").innerHTML = guessList;        
+    } 
+
+    else {
+        // the User loses one Guess
+        guessesLeft--;
+        // This function updates the Guesses Left counter
+        updateGuesses();
+        // and the user's incorrect guess is printed out onto the screen
+        document.getElementById("guesslist").innerHTML = guessList;
+
+        if (guessesLeft === 0) {
+            // Losses goes up
+            losses++;
+            // the Computer picks a new letter
+            computerNewGuess();
+            // The on-screen element for Losses is updated
+            document.getElementById("displayLosses").innerHTML = losses;
+           console.log(computerGuess);
+            // The guesses left counter is reset to 10 again.
+            guessesLeft = 10;
+            updateGuesses();
+            // And the Array for the user Guess List is reset.
+            guessList = [];
+            document.getElementById("guesslist").innerHTML = guessList;
+
+        }
+
+    }
+
+
+}
+
+// We need to check whether the user's input is legitimate. 
+// We do this with an IF statement. I.E., "if the user's input does 
+// not equal -1 in this array (translation: If the input is NOT un-findable)
+// then logically it must BE part of this array."
+else  {
+    document.getElementById("message").innerHTML = "ERROR: Only letters A - Z are valid inputs.";
+    }
+
+
+}
+</script>
+
+</body>
+</html>
